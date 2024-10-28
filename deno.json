@@ -1,0 +1,11 @@
+{
+  "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+  "imports": {
+    "@core/unknownutil": "jsr:@core/unknownutil@4.3.0",
+    "@david/dax": "jsr:@david/dax@0.42.0",
+    "@std/cli": "jsr:@std/cli@1.0.6"
+  },
+  "tasks": {
+    "mysql-tunnel": "deno run -A ./cli.ts"
+  }
+}
