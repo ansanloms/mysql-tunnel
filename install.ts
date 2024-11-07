@@ -1,5 +1,5 @@
 const name = "mysql-tunnel";
-const version = "v0.0.2";
+const version = "v0.0.3";
 const baseUrl = `https://raw.githubusercontent.com/ansanloms/${name}/${version}`;
 
 const getTempFile = async (url: string) => {
