@@ -1,6 +1,6 @@
 const name = "mysql-tunnel";
-const baseUrl = `https://raw.githubusercontent.com/ansanloms/${name}`;
 const version = "v0.0.2";
+const baseUrl = `https://raw.githubusercontent.com/ansanloms/${name}/${version}`;
 
 const getTempFile = async (url: string) => {
   const response = await fetch(url);
@@ -28,10 +28,10 @@ const command = new Deno.Command(Deno.execPath(), {
     "--name",
     name,
     "--config",
-    await getTempFile(`${baseUrl}/${version}/deno.json`),
+    await getTempFile(`${baseUrl}/deno.json`),
     "--lock",
-    await getTempFile(`${baseUrl}/${version}/deno.lock`),
-    `${baseUrl}/${version}/cli.ts`,
+    await getTempFile(`${baseUrl}/deno.lock`),
+    `${baseUrl}/cli.ts`,
   ],
 });
 
