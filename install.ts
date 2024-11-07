@@ -4,24 +4,39 @@ const version = "v0.0.1";
 
 const cli = `${baseUrl}/${version}/cli.ts`;
 const config = `${baseUrl}/${version}/deno.json`;
+const lock = `${baseUrl}/${version}/deno.lock`;
 
-const configTemp = await Deno.makeTempFile({
-  prefix: `${cmd}-`,
-  suffix: ".json",
-});
+const getTempFile = async (url) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
 
-const configResponse = await fetch(config);
-if (!configResponse.ok) {
-  throw new Error(`HTTP error! status: ${configResponse.status}`);
-}
+  const tempFile = await Deno.makeTempFile();
 
-await Deno.writeFile(
-  configTemp,
-  new Uint8Array(await configResponse.arrayBuffer()),
-);
+  await Deno.writeFile(
+    tempFile,
+    new Uint8Array(await response.arrayBuffer()),
+  );
+
+  return tempFile;
+};
 
 const command = new Deno.Command(Deno.execPath(), {
-  args: ["install", "-gAfr", "-n", cmd, "-c", configTemp, "--no-lock", cli],
+  args: [
+    "install",
+    "--global",
+    "--reload",
+    "--force",
+    "--allow-all",
+    "--name",
+    cmd,
+    "--config",
+    await getTempFile(config),
+    "--lock",
+    await getTempFile(lock),
+    cli,
+  ],
 });
 
 const { success, stderr } = await command.output();
