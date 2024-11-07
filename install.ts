@@ -1,12 +1,8 @@
-const cmd = "mysql-tunnel";
-const baseUrl = `https://raw.githubusercontent.com/ansanloms/${cmd}`;
+const name = "mysql-tunnel";
+const baseUrl = `https://raw.githubusercontent.com/ansanloms/${name}`;
 const version = "v0.0.1";
 
-const cli = `${baseUrl}/${version}/cli.ts`;
-const config = `${baseUrl}/${version}/deno.json`;
-const lock = `${baseUrl}/${version}/deno.lock`;
-
-const getTempFile = async (url) => {
+const getTempFile = async (url: string) => {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -30,12 +26,12 @@ const command = new Deno.Command(Deno.execPath(), {
     "--force",
     "--allow-all",
     "--name",
-    cmd,
+    name,
     "--config",
-    await getTempFile(config),
+    await getTempFile(`${baseUrl}/${version}/deno.json`),
     "--lock",
-    await getTempFile(lock),
-    cli,
+    await getTempFile(`${baseUrl}/${version}/deno.lock`),
+    `${baseUrl}/${version}/cli.ts`,
   ],
   stdin: "piped",
   stdout: "piped",
