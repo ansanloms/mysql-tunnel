@@ -55,15 +55,11 @@ export const getEphemeralPort = (
 };
 
 export const isListenPort = async (port: number) => {
-  try {
-    if (Deno.build.os === "windows") {
-      return (await $`netstat -an | findstr 127.0.0.1:${port} | findstr LISTENING`)
-        .code === 0;
-    } else {
-      return (await $`netstat -tuln | grep "127.0.0.1:${port}" | grep LISTEN`)
-        .code === 0;
-    }
-  } catch {
-    return false;
+  if (Deno.build.os === "windows") {
+    return (await $`netstat -an | findstr 127.0.0.1:${port} | findstr LISTENING`)
+      .code === 0;
+  } else {
+    return (await $`netstat -tuln | grep "127.0.0.1:${port}" | grep LISTEN`)
+      .code === 0;
   }
 };
