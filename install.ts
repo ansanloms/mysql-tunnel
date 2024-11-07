@@ -37,12 +37,17 @@ const command = new Deno.Command(Deno.execPath(), {
     await getTempFile(lock),
     cli,
   ],
+  stdin: "piped",
+  stdout: "piped",
 });
 
-const { success, stderr } = await command.output();
+const child = command.spawn();
 
-if (success) {
-  console.info("Successed.");
-} else {
-  throw new Error(new TextDecoder().decode(stderr));
-}
+child.stdout.pipeTo(
+  Deno.openSync("output", { write: true, create: true }).writable,
+);
+
+child.stdin.close();
+
+const status = await child.status;
+Deno.exit(status.code);
